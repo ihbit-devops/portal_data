@@ -53,7 +53,7 @@ def main():
     'language': 'en'
     }
 
-
+    print('-------------------------------Deposit--------------------------------------')
     with open('./deposit_{}.csv'.format(given_date), 'a') as the_file:
         the_file.write('{}\n'.format(header))
         for _ in range(0, 100000, 200):
@@ -93,12 +93,13 @@ def main():
                 mnt_price = math.ceil((prices[deposit['asset']] * busd_rate) * 100) / 100
                 mnt_value = math.ceil(float(deposit['amount']) * mnt_price)
 
-                # if mnt_value >= 20000000:
-                the_file.write('{},{},{},{},{},{},{},{},{},{}\n'.format(deposit['uid'], deposit['asset'], prices[deposit['asset']], 
-                    mnt_price, deposit['amount'], mnt_value, deposit['network'], deposit['address'], created_date, finish_date))
+                if mnt_value >= 20000000:
+                    the_file.write('{},{},{},{},{},{},{},{},{},{}\n'.format(deposit['uid'], deposit['asset'], prices[deposit['asset']], 
+                        mnt_price, deposit['amount'], mnt_value, deposit['network'], deposit['address'], created_date, finish_date))
             
             print(f'{_} - {len(data["data"]["spotDepositRecord"])}')
 
+    print('-------------------------------Withdraw--------------------------------------')
 
     with open('./withdraw_{}.csv'.format(given_date), 'a') as the_file:
         the_file.write('{}\n'.format(header))
@@ -141,9 +142,9 @@ def main():
                 mnt_price = math.ceil((prices[withdraw['asset']] * busd_rate) * 100) / 100
                 mnt_value = math.ceil(float(withdraw['amount']) * mnt_price)
 
-                # if mnt_value >= 20000000:
-                the_file.write('{},{},{},{},{},{},{},{},{},{}\n'.format(withdraw['uid'], withdraw['asset'], prices[withdraw['asset']], 
-                    mnt_price, withdraw['amount'], mnt_value, withdraw['network'], withdraw['address'], created_date, finish_date))
+                if mnt_value >= 20000000:
+                    the_file.write('{},{},{},{},{},{},{},{},{},{}\n'.format(withdraw['uid'], withdraw['asset'], prices[withdraw['asset']], 
+                        mnt_price, withdraw['amount'], mnt_value, withdraw['network'], withdraw['address'], created_date, finish_date))
             
             print(f'{_} - {len(data["data"]["spotWithdrawRecord"])}')
 
