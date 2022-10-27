@@ -7,11 +7,11 @@ from datetime import datetime, date
 
 header = 'uid,symbol,price,mnt_price,busd_amount,mnt_amount,token_amount,type,createTime,wallet'
 
-busd_rate = 3382.39
-given_date = '25'
+busd_rate = 3384.06
+given_date = '26'
 
 headers = {
-  'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjMwLCJzaWduIjoiMjdkZTYwNTYxNTM3NDA0NTg2MjBjMjkxMGE1YjM3MzkiLCJ0diI6MCwiaWF0IjoxNjY2NzUxNDA1LCJleHAiOjE2NjY3NjU4MDV9.5H9hDLKd02l-RHarwEH1r-S7fLg_o1fIRlhIN_XSlPs',
+  'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjMwLCJzaWduIjoiMTk2ODJiODJhOWQzNGE2NGI5M2E2MzBkOGM2MjI3NDAiLCJ0diI6MCwiaWF0IjoxNjY2ODU5NDA1LCJleHAiOjE2NjY4NzM4MDV9.bCHIEy6GdtosngLWvyzLSWu1jRKMfdyLjztCAurdGdA',
   'language': 'en'
 }
 
@@ -19,7 +19,7 @@ with open('./trade_{}.csv'.format(given_date), 'a') as the_file:
     the_file.write('{}\n'.format(header))
     
     for _ in range(0, 1000000, 500):
-        url = "https://www.x-meta.com/bc/v1/exchange/trade-records?startTime=1666627200000&endTime=1666713600000&settleStatus=10&offset={}&limit=500".format(_)
+        url = "https://www.x-meta.com/bc/v1/exchange/trade-records?startTime=1666713600000&endTime=1666800000000&settleStatus=10&offset={}&limit=500".format(_)
         response = requests.request("GET", url, headers=headers)
 
         data = response.json()

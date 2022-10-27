@@ -4,25 +4,25 @@ from datetime import datetime
 import math
 
 header = 'uid,asset,price,mnt_price,amount,mnt_amount,network,address,createDate,finishDate'
-busd_rate = 3378.10
-given_date = '24'
+busd_rate = 3382.39
+given_date = '25'
 prices = {
     'BUSD': 1,
     'USDT': 1
 }
 
 headers = {
-  'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjMwLCJzaWduIjoiYWI3NzA1YmY3MGYzNDBmNGI2NDliYjcyMzEwMjEyNjMiLCJ0diI6MCwiaWF0IjoxNjY2NzY1ODA1LCJleHAiOjE2NjY3ODAyMDV9.ry-wkllp5j0MgGd-kHDTnWST-tZAZoAmoKZZASZ2cFY',
+  'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjMwLCJzaWduIjoiMTk2ODJiODJhOWQzNGE2NGI5M2E2MzBkOGM2MjI3NDAiLCJ0diI6MCwiaWF0IjoxNjY2ODU5NDA1LCJleHAiOjE2NjY4NzM4MDV9.bCHIEy6GdtosngLWvyzLSWu1jRKMfdyLjztCAurdGdA',
   'language': 'en'
 }
 
 with open('./deposit_{}.csv'.format(given_date), 'a') as the_file:
     the_file.write('{}\n'.format(header))
     for _ in range(0, 100000, 200):
-        url = "https://www.x-meta.com/bc/v1/exchange/spot-deposit-record?startTime=1666540800000&endTime=1666713600000&status=10&offset={}&limit=200".format(_)
+        url = "https://www.x-meta.com/bc/v1/exchange/spot-deposit-record?startTime=1666627200000&endTime=1666713600000&status=10&offset={}&limit=200".format(_)
         response = requests.request("GET", url, headers=headers)
         data = response.json()
-        
+
         try:
             assert data['code'] == 0
         except:
@@ -64,7 +64,7 @@ with open('./deposit_{}.csv'.format(given_date), 'a') as the_file:
 with open('./withdraw_{}.csv'.format(given_date), 'a') as the_file:
     the_file.write('{}\n'.format(header))
     for _ in range(0, 100000, 200):
-        url = "https://www.x-meta.com/bc/v1/exchange/spot-withdraw-record?startTime=1666540800000&endTime=1666627200000&status=10&offset={}&limit=200".format(_)
+        url = "https://www.x-meta.com/bc/v1/exchange/spot-withdraw-record?startTime=1666627200000&endTime=1666713600000&status=10&offset={}&limit=200".format(_)
         response = requests.request("GET", url, headers=headers)
         data = response.json()
         
@@ -85,7 +85,6 @@ with open('./withdraw_{}.csv'.format(given_date), 'a') as the_file:
             finish_date = fns_obj.strftime('%Y.%m.%d')
 
             if withdraw['uid'] == "176570" or withdraw['uid'] == "169586":
-                print('SKIPPED!.')
                 continue
 
             if withdraw['asset'] not in prices:
