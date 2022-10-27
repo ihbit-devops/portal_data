@@ -49,8 +49,8 @@ def main():
     }
 
     headers = {
-    'Authorization': f'Bearer {meta_data["token"]}',
-    'language': 'en'
+        'Authorization': f'Bearer {meta_data["token"]}',
+        'language': 'en'
     }
 
     print('-------------------------------Deposit--------------------------------------')
@@ -66,6 +66,11 @@ def main():
                 assert data['code'] == 0
             except:
                 sleep(10)
+                meta_data = get_token_and_rate(given_date)
+                headers = {
+                    'Authorization': f'Bearer {meta_data["token"]}',
+                    'language': 'en'
+                }
                 response = requests.request("GET", url, headers=headers)
 
             if len(data["data"]["spotDepositRecord"]) == 0:
@@ -78,6 +83,8 @@ def main():
                 fns_obj = datetime.fromtimestamp(int(deposit['finishTime']) // 1000)
                 finish_date = fns_obj.strftime('%Y.%m.%d')
 
+                if deposit['uid'] == "176570" or deposit['uid'] == "169586":
+                    continue
 
                 if deposit['asset'] not in prices:
                     url = "https://www.x-meta.com/open/v1/market/depth?symbol={}_BUSD&limit=10".format(deposit['asset'])
@@ -113,6 +120,11 @@ def main():
                 assert data['code'] == 0
             except:
                 sleep(10)
+                meta_data = get_token_and_rate(given_date)
+                headers = {
+                    'Authorization': f'Bearer {meta_data["token"]}',
+                    'language': 'en'
+                }
                 response = requests.request("GET", url, headers=headers)
 
             if len(data["data"]["spotWithdrawRecord"]) == 0:
