@@ -2,18 +2,23 @@ import requests
 from time import sleep
 from datetime import datetime
 
+import boto3
 
-header = 'asset,amount,createDate'
 
+ssm = boto3.client('ssm')
+
+token = ssm.get_parameter(Name='/portal/token', WithDecryption=True)['Parameter']['Value']
 headers = {
-  'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjI4LCJzaWduIjoiZDUwZjFjMTlhNThjNDEwMzlmMTI5YTUxYTkyYjRjYmIiLCJ0diI6MCwiaWF0IjoxNjYzODEzMjM3LCJleHAiOjE2NjM4Mjc2Mzd9.m-XbR_FDBkOfujTmTER7g5lNDMOE7AP_ZJRsc3jhkMU',
+  'Authorization': f'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjI4LCJzaWduIjoiMWJkNDRmZDJmZmY0NDJjMDhiM2M0YmJjZDFiNzQ5ZTUiLCJ0diI6MCwiaWF0IjoxNjc2MDI0NTc1LCJleHAiOjE2NzYwMzg5NzV9.1wNcJV53MnFx0YNnBzc_bN4cY_CG__4l9OT5UV3oHPQ',
   'language': 'en'
 }
 
-with open('./busd-withdraw-busd.csv', 'a') as the_file:
+header = 'asset,amount,createDate'
+
+with open('./withdraw_jan.csv', 'a') as the_file:
     the_file.write('{}\n'.format(header))
     for _ in range(0, 100000, 200):
-        url = "https://www.x-meta.com/bc/v1/exchange/spot-withdraw-record?keyword=operation@x-meta.com&startTime=1662739200000&endTime=1666281600000&status=10&asset=BUSD&offset={}&limit=200".format(_)
+        url = "https://www.x-meta.com/bc/v1/exchange/spot-withdraw-record?startTime=1672502400000&endTime=1675180800000&status=10&offset={}&limit=200".format(_)
         response = requests.request("GET", url, headers=headers)
         data = response.json()
         
@@ -31,8 +36,9 @@ with open('./busd-withdraw-busd.csv', 'a') as the_file:
             createdDate = crtObj.strftime('%Y-%m-%d')
             day_of_week = crtObj.strftime('%A')
 
-            if user['uid'] == "176570" or user['uid'] == "169586":
+            if user['uid'] == "176570" or user['uid'] == "169586" or user['uid'] == "165055":
                 continue
+
             the_file.write('{},{},{}\n'.format(user['asset'], user['amount'], createdDate))
         
         print(f'{_} - {len(data["data"]["spotWithdrawRecord"])}')

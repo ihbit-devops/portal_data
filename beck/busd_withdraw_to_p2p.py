@@ -6,14 +6,14 @@ from datetime import datetime
 header = 'asset,amount,createDate'
 
 headers = {
-  'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjI4LCJzaWduIjoiNzZmNTNmZWIxY2EzNGZkY2FhYWE1YTcyZTAxODRiZDQiLCJ0diI6MCwiaWF0IjoxNjY2MDczMzA0LCJleHAiOjE2NjYwODc3MDR9.3eRVG5tLv9K5fuKSmtsF8TNL_d1uH79B4Dn-rhFb1oc',
+  'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjI4LCJzaWduIjoiNzIyZmYwYTc5MjcyNDNkOGJmOWM3Y2VhZTQ1Nzg2ZTciLCJ0diI6MCwiaWF0IjoxNjY5MDE5MjA3LCJleHAiOjE2NjkwMzM2MDd9.woQiOpAw2rPIUkzwtOxxlvsCk2rTKu0AhEvDVXaYB5A',
   'language': 'en'
 }
 
-with open('./busd_withdraw_p2p_sep_oct.csv', 'a') as the_file:
+with open('./usdt_09-22.csv', 'a') as the_file:
     the_file.write('{}\n'.format(header))
     for _ in range(0, 100000, 200):
-        url = "https://www.x-meta.com/bc/v1/exchange/spot-withdraw-record?startTime=1662825600000&endTime=1666022400000&status=10&asset=BUSD&offset={}&limit=200".format(_)
+        url = "https://www.x-meta.com/bc/v1/exchange/spot-withdraw-record?startTime=1663776000000&endTime=1663862400000&status=10&asset=USDT&offset={}&limit=200".format(_)
         response = requests.request("GET", url, headers=headers)
         data = response.json()
         

@@ -22,7 +22,7 @@ headers = {
 
 with open('./withdraw_busd.json', 'w') as the_file:
     for _ in range(0, 100000, 200):
-        url = "https://www.x-meta.com/bc/v1/exchange/spot-withdraw-record?startTime=1659196800000&endTime=1661961599000&status=10&asset=BUSD&offset={}&limit=200".format(_)
+        url = "https://www.x-meta.com/bc/v1/exchange/spot-withdraw-record?startTime=1663776000000&endTime=1663862400000&status=10&asset=BUSD&offset={}&limit=200".format(_)
         response = requests.request("GET", url, headers=headers)
         data = response.json()
         
@@ -33,8 +33,8 @@ with open('./withdraw_busd.json', 'w') as the_file:
             response = requests.request("GET", url, headers=headers)
 
         if len(data["data"]["spotWithdrawRecord"]) == 0:
-            the_file.write(json.dumps(data_best))
-            print(data_best)
+            # the_file.write(json.dumps(data_best))
+            # print(data_best)
             print('FINISHED!.')
             break
 

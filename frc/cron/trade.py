@@ -39,7 +39,7 @@ def get_token_and_rate(date_to_fetch):
     }
 
 
-def main():
+def trade():
     meta_data = get_token_and_rate(given_date)
     header = 'uid,symbol,price,mnt_price,busd_amount,mnt_amount,token_amount,type,createTime,wallet'
     busd_rate = float(meta_data['rate'])
@@ -49,7 +49,7 @@ def main():
         'language': 'en'
     }
 
-    with open('./tradetest_{}.csv'.format(given_date), 'a') as the_file:
+    with open('./trade_{}.csv'.format(given_date), 'a') as the_file:
         the_file.write('{}\n'.format(header))
         
         for _ in range(0, 1000000, 500):

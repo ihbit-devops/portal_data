@@ -3,16 +3,17 @@ from time import sleep
 from datetime import datetime
 
 
-header = 'UID,date'
+header = 'uid,name,phone'
 
 headers = {
-  'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEwLCJzaWduIjoiOTIzNmE5ZGIxZjNjNDExZGFmZjRmMzA4YTQ1Yjk0YTgiLCJ0diI6MCwiaWF0IjoxNjU0MjE2NTI4LCJleHAiOjE2NTQyMzA5Mjh9.7KTaPenboOZmkphfoVVfshIUz9WpVfq6V6-7WUlG5xY'
+  'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjI4LCJzaWduIjoiYmJhZDY0Njc4MDhmNGEzNmEzZmM0MDE1ZmFhMzAzNDgiLCJ0diI6MCwiaWF0IjoxNjc2NDQ0NjA0LCJleHAiOjE2NzY0NTkwMDR9.0FuQX8zWtu8s4J6PQIEBC0aefoErx6Z_IoE06gceBh8',
+  'language': 'en'
 }
 
-with open('./registered_users.csv', 'a') as the_file:
+with open('./3000_users.csv', 'a') as the_file:
     the_file.write('{}\n'.format(header))
-    for _ in range(0, 62000, 100):
-        url = "https://www.x-meta.com/bc/v1/exchange/customers?offset={}&limit=100".format(_)
+    for _ in range(0, 62000, 200):
+        url = "https://www.x-meta.com/bc/v1/exchange/customers?offset={}&limit=200".format(_)
         response = requests.request("GET", url, headers=headers)
         data = response.json()        
 
@@ -22,13 +23,14 @@ with open('./registered_users.csv', 'a') as the_file:
             sleep(10)
             response = requests.request("GET", url, headers=headers)
 
-        for user in data['data']['userList']:
-            crtObj = datetime.fromtimestamp(int(user['createTime']) // 1000)
-            createdDate = crtObj.strftime('%Y-%m-%d')
+        # for user in data['data']['assetList']:
+            # crtObj = datetime.fromtimestamp(int(user['createTime']) // 1000)
+            # createdDate = crtObj.strftime('%Y-%m-%d')
+        name = data["data"]["userList"][0]["name"]
+        phone = data["data"]["userList"][0]["phone"]
+        the_file.write('{},{},{}\n'.format(, createdDate))
 
-            the_file.write('{},{}\n'.format(user['uid'], createdDate))
-        
-        print(f'{_} - {len(data["data"]["userList"])}')
+        print(f'{_} - {len(data["data"]["assetList"])}')
 
 
 # dynamo = boto3.client('dynamodb')

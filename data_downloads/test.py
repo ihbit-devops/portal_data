@@ -1,74 +1,48 @@
-import re
+import requests
+from time import sleep
+
+header = 'uid,name,phone'
+
+headers = {
+  'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjI4LCJzaWduIjoiYmJhZDY0Njc4MDhmNGEzNmEzZmM0MDE1ZmFhMzAzNDgiLCJ0diI6MCwiaWF0IjoxNjc2NDQ0NjA0LCJleHAiOjE2NzY0NTkwMDR9.0FuQX8zWtu8s4J6PQIEBC0aefoErx6Z_IoE06gceBh8',
+  'language': 'en'
+}
 
 
+with open('./tuvshin_final.csv', 'r') as the_file:
+    with open('./formated_sheet_final.csv', 'a') as write_file:
+        data = {}
+        lines = the_file.readlines()
+        last_date = ''
+        for line in lines:
+            
+            # try:
+            #     url = "https://www.x-meta.com/bc/v1/exchange/customers?keyword={}&offset=0&limit=100".format(line.strip())
+            #     response = requests.request("GET", url, headers=headers)
+            #     data = response.json()
+            #     assert data['code'] == 0
+            # except:
+            #     sleep(15)
+            #     response = requests.request("GET", url, headers=headers)
+            
+            # text = f'{line.strip()},{data["data"]["userList"][0]["name"]},{data["data"]["userList"][0]["phone"]}'
+            # print(text)
+            # write_file.write('{}\n'.format(text))
+            date_field = line.split(',')[0]
+            if '2022-' in date_field or '2023-' in date_field:
+                last_date = date_field
+                data[last_date] = []
+            else:
+                data[last_date].append(line)
 
-def description_clean(desc: str) -> str:
-        # Empty description
-    desc = desc.strip()
-    
-    if desc == '':
-        return ''
-    
-    # Adding gmail and yahoo
-    lowered_desc = desc.lower()
-    if 'gmail' in lowered_desc and '@' not in lowered_desc:
-        splitted_email = lowered_desc.split('gmail')
-        desc = splitted_email[0] + '@gmail' + splitted_email[1]
+        for k in data.keys():
+            for item in data[k]:
+                uid = item.split(',')[0].strip()
+                count = item.split(',')[1].strip()
+                sum = item.split(',')[2].strip()
+                price = item.split(',')[3].strip()
+                
+                if int(count) >= 2:
+                    text = f'{uid},{count},{sum},{price},{k}'
+                    write_file.write('{}\n'.format(text))
 
-    if 'yahoo' in lowered_desc and '@' not in lowered_desc:
-        splitted_email = lowered_desc.split('yahoo')
-        desc = splitted_email[0] + '@yahoo' + splitted_email[1]
-    desc = desc.upper()
-    
-    
-    replacements = {
-        'EB-':'',
-        'EB -':'',
-        'MM:':'',
-        'MM: ':'',
-        '+':'',
-        '*':'',
-        '%':'',
-        'qpay':'',
-        '(ГОЛОМТБАНКИКСМЕТАХХК)':''
-    }
-    
-    # CLeaning from outside
-    for key in replacements.keys():
-        if key in desc:
-            desc = desc.replace(key, '')
-    
-    description = desc.upper()
-    data_arr = description.split(' ')
-
-    result = []
-    for item in data_arr:
-        if item != '':
-            result.append(item)
-    
-    tmp = ''.join(result).strip().lower()
-
-    email = ''
-    is_found_invalid = False
-    
-    for index, ltr in enumerate(tmp):
-       if ltr == '@':
-           email += tmp[:index]
-           sub_email = tmp[index:]
-           
-           for idx, lt in enumerate(sub_email):
-                if lt == '.':
-                    email += sub_email[:idx]
-                    sub_sub_email = sub_email[idx:]
-                    
-                    for id, l in enumerate(sub_sub_email):
-                        if l == '(' or l == '-' or l == '_' or l == ',':
-                            email += sub_sub_email[:id]
-                            is_found_invalid = True
-                            break
-                    if is_found_invalid == False:
-                        email += sub_sub_email
-
-
-    result = re.sub(r'[^\x00-\x7F\x80-\xFF\u0100-\u017F\u0180-\u024F\u1E00-\u1EFF]', u'', email) 
-    return result.strip()

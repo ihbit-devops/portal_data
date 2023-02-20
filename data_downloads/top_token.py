@@ -5,17 +5,17 @@ from time import sleep
 from datetime import datetime
 
 headers = {
-  'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjI4LCJzaWduIjoiYzYzYjE5MzA1ZjQ4NDMzZDg4NzEzMTYzMDk2YWIwNGUiLCJ0diI6MCwiaWF0IjoxNjY2MzQ4Nzk1LCJleHAiOjE2NjYzNjMxOTV9.QfBAUCeJc3y8KDIg5ebIz6NK2iYuNhe5GUCKySQcSs0',
+  'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjI4LCJzaWduIjoiMjY4OTY0NGQ1MWQ3NDk2NWE3MjE2ZmQ1ODZjZjJmOTEiLCJ0diI6MCwiaWF0IjoxNjY3NjIwMDY2LCJleHAiOjE2Njc2MzQ0NjZ9.TyPlRhzAB_cgy90GlEnTtnu7HRHwNpY02JTDxQ4o-jg',
   'language': 'en'
 }
 
 tokens = {}
 finish = False
 
-with open('./top_tokens_0910-1021.csv', 'a') as the_file:
+with open('./top_tokens_1028-1104.csv', 'a') as the_file:
     for _ in range(0, 1000000, 500):
         
-        url = "https://www.x-meta.com/bc/v1/exchange/trade-records?startTime=1662739200000&endTime=1666281600000&settleStatus=10&offset={}&limit=500".format(_)
+        url = "https://www.x-meta.com/bc/v1/exchange/trade-records?startTime=1666886400000&endTime=1667491200000&settleStatus=10&offset={}&limit=500".format(_)
         response = requests.request("GET", url, headers=headers)
 
         data = response.json()

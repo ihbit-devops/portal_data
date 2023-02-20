@@ -83,7 +83,7 @@ def main():
                 fns_obj = datetime.fromtimestamp(int(deposit['finishTime']) // 1000)
                 finish_date = fns_obj.strftime('%Y.%m.%d')
 
-                if deposit['uid'] == "176570" or deposit['uid'] == "169586":
+                if deposit['uid'] == "176570" or deposit['uid'] == "169586" or deposit['uid'] == "165055":
                     continue
 
                 if deposit['asset'] not in prices:
@@ -137,7 +137,7 @@ def main():
                 fns_obj = datetime.fromtimestamp(int(withdraw['finishTime']) // 1000)
                 finish_date = fns_obj.strftime('%Y.%m.%d')
 
-                if withdraw['uid'] == "176570" or withdraw['uid'] == "169586":
+                if withdraw['uid'] == "176570" or withdraw['uid'] == "169586" or withdraw['uid'] == "165055":
                     continue
 
                 if withdraw['asset'] not in prices:

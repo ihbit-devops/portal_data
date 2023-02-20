@@ -1,20 +1,42 @@
-import requests
 from time import sleep
-from datetime import datetime
+from datetime import datetime, timedelta
 import math
 
-header = 'uid,asset,price,mnt_price,amount,mnt_amount,network,address,createDate,finishDate'
-busd_rate = 3382.39
-given_date = '25'
-prices = {
-    'BUSD': 1,
-    'USDT': 1
-}
+import requests
+import boto3
 
-headers = {
-  'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjMwLCJzaWduIjoiMTk2ODJiODJhOWQzNGE2NGI5M2E2MzBkOGM2MjI3NDAiLCJ0diI6MCwiaWF0IjoxNjY2ODU5NDA1LCJleHAiOjE2NjY4NzM4MDV9.bCHIEy6GdtosngLWvyzLSWu1jRKMfdyLjztCAurdGdA',
-  'language': 'en'
-}
+
+today_date_obj = datetime.now()
+yesterday_date_obj = today_date_obj - timedelta(1)
+given_date = datetime.strftime(yesterday_date_obj, '%Y-%m-%d')
+
+yesterday_date_range = int(datetime(yesterday_date_obj.year, yesterday_date_obj.month, 
+                            yesterday_date_obj.day).timestamp() * 1000)
+today_date_range = int(datetime(today_date_obj.year, today_date_obj.month, 
+                            today_date_obj.day).timestamp() * 1000)
+
+dynamo = boto3.client('dynamodb')
+ssm = boto3.client('ssm')
+
+
+def get_token_and_rate(date_to_fetch):
+    rate = dynamo.get_item(
+        Key={
+            'date': {
+                'S': date_to_fetch,
+            }
+        },
+        ReturnConsumedCapacity='TOTAL',
+        TableName='mongol_bank_rate'
+    )['Item']['value']['S']
+
+    token = ssm.get_parameter(Name='/portal/token', WithDecryption=True)['Parameter']['Value']
+
+    return {
+        'rate': rate,
+        'token': token
+    }
+
 
 with open('./deposit_{}.csv'.format(given_date), 'a') as the_file:
     the_file.write('{}\n'.format(header))
